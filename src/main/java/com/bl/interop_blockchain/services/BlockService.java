@@ -1,10 +1,16 @@
 package com.bl.interop_blockchain.services;
 
+import java.io.IOException;
+import java.security.KeyPair;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.bl.interop.utils.Parameters;
+import com.bl.interop.utils.PcryptUtils;
+import com.bl.interop.utils.StringUtils;
 import com.bl.interop_blockchain.models.Block;
-import com.bl.interop_blockchain.models.StringUtils;
 import com.bl.interop_blockchain.models.Transaction;
 
 
@@ -15,12 +21,6 @@ public class BlockService {
     public BlockService() {
         this.blockChain = new ArrayList<Block>();
         blockChain.add(this.getFristBlock());
-    }
-
-    private String calculateHash(int index, String previousHash, long timestamp, String data) {
-        StringBuilder builder = new StringBuilder(index);
-        builder.append(previousHash).append(timestamp).append(data);
-        return StringUtils.applySha256(builder.toString());
     }
 
     public Block getLatestBlock() {
@@ -37,13 +37,17 @@ public class BlockService {
         return new Block(1, "0", System.currentTimeMillis(), l);
     }
 
-    public Block generateNextBlock(String blockData) {
+    public Block generateNextBlock(String to,String blockData) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
         Block previousBlock = this.getLatestBlock();
         int nextIndex = previousBlock.getIndex() + 1;
         long nextTimestamp = System.currentTimeMillis();
         Transaction transaction = new Transaction();
     	transaction.set_id(0);
     	transaction.setData(blockData);
+    	KeyPair loadedKeyPair = PcryptUtils.LoadKeyPair(Parameters.path, Parameters.algorithm);
+    	transaction.setSender(StringUtils.getStringFromKey(loadedKeyPair.getPublic()));
+    	transaction.setRecipient(to);
+    	transaction.generateSignature(loadedKeyPair.getPrivate());
     	ArrayList<Transaction> l = new ArrayList<Transaction>();
     	l.add(transaction);
         return new Block(nextIndex, previousBlock.getHash(), nextTimestamp, l);

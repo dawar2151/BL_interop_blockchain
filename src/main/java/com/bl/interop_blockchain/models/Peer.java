@@ -1,9 +1,9 @@
 package com.bl.interop_blockchain.models;
 
-import java.security.PrivateKey;
-import java.security.PublicKey;
-
-public class Peer {
+import java.io.Serializable;
+import java.security.*;
+import java.security.spec.ECGenParameterSpec;
+public class Peer implements Serializable {
 	private int index;
 	private String name;
 	private int p2pPort;
@@ -73,6 +73,23 @@ public class Peer {
 	}
 	public void setPublicKey(PublicKey publicKey) {
 		this.publicKey = publicKey;
+	}
+	public void generateKeyPair() {
+		try {
+		
+			KeyPairGenerator keyGen = KeyPairGenerator.getInstance("ECDSA","BC");
+			SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
+			ECGenParameterSpec ecSpec = new ECGenParameterSpec("prime192v1");
+			// Initialize the key generator and generate a KeyPair
+			keyGen.initialize(ecSpec, random); //256 
+	        KeyPair keyPair = keyGen.generateKeyPair();
+	        // Set the public and private keys from the keyPair
+	        this.privateKey = keyPair.getPrivate();
+	        this.publicKey = keyPair.getPublic();
+	        
+		}catch(Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 }

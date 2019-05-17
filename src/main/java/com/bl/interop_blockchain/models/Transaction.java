@@ -1,22 +1,25 @@
 package com.bl.interop_blockchain.models;
 
 
+import java.security.PrivateKey;
 import java.security.PublicKey;
+
+import com.bl.interop.utils.StringUtils;
 
 
 public class Transaction {
 	
 
 	public int _id;//Contains a hash of transaction*
-	public PublicKey send;//Senders address/public key.
-	public PublicKey recipient; //Recipients address/public key.
-	public String data;
+	public String sender;//Senders address/public key.
+	public String recipient; //Recipients address/public key.
+	public String data = "";
 	public byte[] signature; //This is to prevent anybody else from spending data in our wallet.
 	private static int sequence = 0; //A rough count of how many transactions have been generated 
 	
-	public Transaction(PublicKey send, PublicKey recipient, String data, byte[] signature) {
+	public Transaction(String send, String recipient, String data, byte[] signature) {
 		super();
-		this.send = send;
+		this.sender = send;
 		this.recipient = recipient;
 		this.data = data;
 		this.signature = signature;
@@ -29,16 +32,16 @@ public class Transaction {
 	public void set_id(int _id) {
 		this._id = _id;
 	}
-	public PublicKey getSend() {
-		return send;
+	public String getSender() {
+		return sender;
 	}
-	public void setSend(PublicKey send) {
-		this.send = send;
+	public void setSender(String send) {
+		this.sender = send;
 	}
-	public PublicKey getRecipient() {
+	public String getRecipient() {
 		return recipient;
 	}
-	public void setRecipient(PublicKey recipient) {
+	public void setRecipient(String recipient) {
 		this.recipient = recipient;
 	}
 	public String getData() {
@@ -63,6 +66,16 @@ public class Transaction {
 	public String toString() {
 		// TODO Auto-generated method stub
 		return this.getData();
+	}
+	//Signs all the data we dont wish to be tampered with.
+	public void generateSignature(PrivateKey privateKey) {
+		String data = sender + sender + this.data;
+		signature = StringUtils.applyECDSASig(privateKey,data);		
+	}
+	//Verifies the data we signed hasnt been tampered with
+	public boolean verifiySignature() {
+		String data = sender + sender + this.data	;
+		return StringUtils.verifyECDSASig(sender, data, signature);
 	}
 }
 

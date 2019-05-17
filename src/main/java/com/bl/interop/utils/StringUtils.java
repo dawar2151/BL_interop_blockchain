@@ -1,10 +1,11 @@
-package com.bl.interop_blockchain.models;
+package com.bl.interop.utils;
 
 import java.security.*;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
+import com.bl.interop_blockchain.models.Transaction;
 import com.google.gson.GsonBuilder;
 
 public class StringUtils {
@@ -49,10 +50,11 @@ public class StringUtils {
 	}
 	
 	//Verifies a String signature 
-	public static boolean verifyECDSASig(PublicKey publicKey, String data, byte[] signature) {
+	public static boolean verifyECDSASig(String publicKey, String data, byte[] signature) {
 		try {
+			PublicKey pk = PcryptUtils.getPublicKey(publicKey);
 			Signature ecdsaVerify = Signature.getInstance("ECDSA", "BC");
-			ecdsaVerify.initVerify(publicKey);
+			ecdsaVerify.initVerify(pk);
 			ecdsaVerify.update(data.getBytes());
 			return ecdsaVerify.verify(signature);
 		}catch(Exception e) {

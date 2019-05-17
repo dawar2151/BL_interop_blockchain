@@ -4,6 +4,8 @@ package com.bl.interop_blockchain.models;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.bl.interop.utils.StringUtils;
+
 public class Block {
 	
 	public String hash;
