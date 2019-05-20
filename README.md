@@ -29,7 +29,7 @@ curl http://localhost:8080/blocks
 ```
 ##### Create block
 ```
-curl  --data "data=Some data to the first block&user=publicKey" http://localhost:8080/mineBlock
+curl  --data "data=Hello !&to=publicKey" http://localhost:8080/mineBlock
 ``` 
 ##### Add peer
 ```
