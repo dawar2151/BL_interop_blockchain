@@ -5,11 +5,7 @@
 
 
 
-### HTTP API
-##### Get blockchain
-
-Coming soon...
-
+### HTTP API & Execution model
 ### Test
 
 export a jar file in every node folder
