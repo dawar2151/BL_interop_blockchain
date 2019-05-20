@@ -15,13 +15,13 @@ Coming soon...
 export a jar file in every node folder
 
 First Peer:
-
+```
 java -jar interop-bl.jar 8080 7001 node_name
-
+```
 Second Peer:
-
+```
 java -jar interop-bl.jar 8081 7003 node_name ws://localhost:7001
-
+```
 Using rest Api to add messages.
 
 Create block:
