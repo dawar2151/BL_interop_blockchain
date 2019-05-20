@@ -29,11 +29,11 @@ curl http://localhost:8080/blocks
 ```
 ##### Create block
 ```
-curl -H "Content-type:application/json" --data '{"data" : "Some data to the first block"&user=publicKey}' http://localhost:8080/mineBlock
+curl  --data "data=Some data to the first block&user=publicKey" http://localhost:8080/mineBlock
 ``` 
 ##### Add peer
 ```
-curl -H "Content-type:application/json" --data '{"peer" : "ws://localhost:7003"}' http://localhost:8080/addPeer
+curl -H  --data "peer=ws://localhost:7003" http://localhost:8080/addPeer
 ```
 #### Query connected peers
 ```
